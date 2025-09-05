@@ -13,3 +13,16 @@ The goal of these bots is to automatically generate code that can detect, neutra
  
 ### For 120B
 - ollama pull gpt-oss:120b
+
+## Malware Killer.py
+#### How the script works
+
+1. **Prompt the LLM** – The user supplies a base directory to scan, and the script sends a carefully‑worded prompt to Ollama.  
+2. **LLM returns a single‑shot Python snippet** – Only pure Python code is returned (no extraneous text).  
+3. **Dry run vs. kill** – By default the script prints the LLM output and **does not** execute it. If the user explicitly confirms (`y/N`), the generated code is run, but it will still only terminate processes if it’s certain that *the user* approved it.  
+4. **Execution safety** – The script captures stdout/stderr, uses a 45‑second timeout, and prints the result.
+> **⚠️ IMPORTANT**  
+> * This script is for educational / defensive use only.  
+> * Do **not** run it on systems that contain critical data unless you are absolutely sure that the model’s suggestions are safe.  
+> * Always double‑check the LLM’s outputs before executing any destructive actions.  
+> * Consider integrating established AV/EDR solutions instead of a hand‑rolled LLM‑based agent for production environments.  
