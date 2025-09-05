@@ -13,7 +13,7 @@ The service
   • can run in batch mode (CSV input → single report),
   • exposes a REST endpoint (`/recommend`) for on‑the‑fly queries.
 
-Author:  <your‑name>
+Author:  Thomas Yiu and gpt oss 20b
 Date:    2025‑09‑05
 """
 
