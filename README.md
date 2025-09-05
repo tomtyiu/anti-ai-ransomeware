@@ -25,4 +25,58 @@ The goal of these bots is to automatically generate code that can detect, neutra
 > * This script is for educational / defensive use only.  
 > * Do **not** run it on systems that contain critical data unless you are absolutely sure that the model’s suggestions are safe.  
 > * Always double‑check the LLM’s outputs before executing any destructive actions.  
-> * Consider integrating established AV/EDR solutions instead of a hand‑rolled LLM‑based agent for production environments.  
+> * Consider integrating established AV/EDR solutions instead of a hand‑rolled LLM‑based agent for production environments.
+
+## Cybersecurity Assistant bot.py
+## How it all fits together
+
+| Feature | Implementation |
+|---------|----------------|
+| **Ollama integration** | `ollama_client.chat.completions.create(...)` using `/gpt-oss:20b`. |
+| **Safety checks** | `_is_destructive()` flags risky verbs; callers must set `confirm=True` in the payload; otherwise a 400 error is returned. |
+| **Audit logging** | Every recommendation is written to a `audit.log` file with restricted permissions (`chmod 600`). |
+| **Batch mode** | `read_threats_from_csv()` + `/batch` endpoint produce a single JSON report. |
+| **REST endpoint** | FastAPI endpoints `/recommend` and `/batch` expose the service. |
+| **Secure environment** | Log file is owned by the service user; the API uses HTTPS in production (recommended). |
+
+## Running the service
+
+1. **Install dependencies**  
+   ```bash
+   pip install fastapi[all] pydantic ollama
+   ```
+
+2. **Start Ollama** (if it’s not running):  
+   ```bash
+   ollama serve
+   ```
+
+3. **Run the API** (use an ASGI server such as Uvicorn):  
+   ```bash
+   uvicorn main:app --host 0.0.0.0 --port 8000
+   ```
+
+4. **Call the service**  
+
+   - *Single threat*  
+     ```bash
+     curl -XPOST http://localhost:8000/recommend \
+          -H "Content-Type: application/json" \
+          -d '{
+                "threat": {
+                  "threat_id": "malware-123",
+                  "file_path": "C:\\Users\\admin\\Downloads\\evil.exe",
+                  "sha256": "abcd1234...etc"
+                },
+                "confirm": true
+              }'
+     ```
+
+   - *Batch (CSV)*  
+     ```bash
+     python main.py --batch threats.csv
+     ```
+
+
+
+
