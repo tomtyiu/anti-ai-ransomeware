@@ -25,7 +25,6 @@ The goal of these bots is to automatically generate code that can detect, neutra
 > * This script is for educational / defensive use only.  
 > * Do **not** run it on systems that contain critical data unless you are absolutely sure that the model’s suggestions are safe.  
 > * Always double‑check the LLM’s outputs before executing any destructive actions.  
-> * Consider integrating established AV/EDR solutions instead of a hand‑rolled LLM‑based agent for production environments.
 
 ## Cybersecurity Assistant bot.py
 ## How it all fits together
